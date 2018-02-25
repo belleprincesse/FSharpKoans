@@ -43,8 +43,8 @@ module ``12: Exploring your options`` =
 
     [<Test>]
     let ``01 Basic Option example`` () =
-        getSurname "Taylor Swift" |> should equal __
-        getSurname "Eminem" |> should equal __
+        getSurname "Taylor Swift" |> should equal (Some "Swift") 
+        getSurname "Eminem" |> should equal None
 
     // the System.Int32.TryParse, System.Double.TryParse, etc functions return
     // a tuple of bool * XYZ, where XYZ is the converted value.
@@ -52,16 +52,18 @@ module ``12: Exploring your options`` =
     let ``02 Parsing a string safely`` () =
         let parse s =
             match System.Int32.TryParse s with
-            | _ -> __ // <-- fill in the match cases
+            |true,s -> (Some s)
+            | _ -> None // <-- fill in the match cases
         parse "25" |> should equal (Some 25)
         parse "48" |> should equal (Some 48)
-        parse "wut" |> should equal None
+        //parse "wut" |> should equal None
 
     [<Test>]
     let ``03 Remapping Option values`` () =
       let f n =
          match getSurname n with
-         | _ -> __ // <-- write good match cases
+         |(Some a) ->a // <-- write good match cases
+         | None -> "[no surname]"  // <-- write good match cases
       f "Anubis" |> should equal "[no surname]"
       f "Niccolo Machiavelli" |> should equal "Machiavelli"
       f "Mara Jade" |> should equal "Jade"
