@@ -44,8 +44,8 @@ module ``10: The Good Kind of Discrimination`` =
             | BSc (_, ComputerScience) | BSc (ComputerScience, _) -> "Good choice!"
             | BSc _ -> "!!SCIENCE!!"
             | BPharm -> "Meh, it's OK."
-            | BCom (Management, Economics) | BCom (Linguistics, Management) -> "Money, money, money."
-            | BA (Linguistics, Philosophy) -> "A thinker, eh?"
+            | BCom (Linguistics, Management) | BCom (Management, Economics) -> "Money, money, money."
+            | BA (Linguistics, Philosophy)-> "A thinker, eh?"
         randomOpinion (BSc (Mathematics, ComputerScience)) |> should equal "Good choice!"
         randomOpinion (BSc (Linguistics, Mathematics)) |> should equal "!!SCIENCE!!"
         randomOpinion (BCom (Management, Economics)) |> should equal "Money, money, money."
@@ -60,8 +60,8 @@ module ``10: The Good Kind of Discrimination`` =
 
     [<Test>]
     let ``03 A discriminated union case with associated data is a function`` () =
-        Broken |> should be ofType<int -> EquipmentStatus>
-        Rented |> should be ofType<string -> EquipmentStatus>
+        Broken |> should be ofType<int-> EquipmentStatus>
+        Rented |> should be ofType<string->EquipmentStatus>
 
     type BinaryTree =
     | Empty
@@ -74,5 +74,4 @@ module ``10: The Good Kind of Discrimination`` =
             | Empty -> 0
             | Node (_, a, b) -> 1 + max (depth a) (depth b)
         let a = __ // <-- you may want to spread this over multiple lines and/or let-bindings ...!
-        
         depth a |> should equal 4

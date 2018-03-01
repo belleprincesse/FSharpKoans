@@ -30,8 +30,7 @@ module ``08: Putting the Function into Functional Programming`` =
 
     [<Test>]
     let ``04 The input to a function is a pattern (Part 3).`` () =
-        // remember our record types from AboutRecords.fs ?
-        let myrecord = { Title="Steelheart"; Author="Plato"; Year=2013 }   //needs to be defined
+        let myrecord = {Title= "Steelheart"; Author= "Plato"; Year= 2013}
         (fun { Author=k } -> "Author is " + k) myrecord |> should equal "Author is Plato"
 
     [<Test>]
@@ -50,7 +49,7 @@ module ``08: Putting the Function into Functional Programming`` =
             let k = "swash" // notice the indentation.
             let b = "buckle" // F# is whitespace-sensitive, so it is important!
             zorro + " likes to " + k + b
-        ) "Zorro the pirate" |> should equal "Zorro the pirate likes to swashbuckle"   //zorro the pirate is the input and should equal part is the output
+        ) "Zorro the pirate" |> should equal "Zorro the pirate likes to swashbuckle"
 
     [<Test>]
     let ``08 A function can span multiple lines (Part 2).`` () =
@@ -110,7 +109,7 @@ module ``08: Putting the Function into Functional Programming`` =
         let f a =
             failwith "An exception will be thrown as soon as this is executed."
             a + 2
-        f  |> should be ofType<int -> int>  // function needs to be of type int
+        f |> should be ofType<int -> int>
 
     [<Test>]
     let ``16 A function is executed when it is called, NOT when it is defined or referenced (Part 2).`` () =
@@ -118,7 +117,7 @@ module ``08: Putting the Function into Functional Programming`` =
             let f a =
                 failwith "An exception will be thrown as soon as this is executed."
                 a + 2
-            f 1232|> should equal 1234
+            f 1232 |> should equal 1234
         ) |> should throw typeof<System.Exception>
 
     [<Test>]
@@ -144,7 +143,7 @@ module ``08: Putting the Function into Functional Programming`` =
         // Extending a bit more, what do you do when you want to apply a function,
         // but modify the result before you give it back?
         let f animal noise = animal + " says " + noise
-        let cows = f "cow" // <-- multiple words on this line, or you may want to make this a multi-line thing.  You MUST use `f`.
+        let cows = fun v ->f "cow" (v+", de gozaru") // <-- multiple words on this line, or you may want to make this a multi-line thing.  You MUST use `f`.
         cows "moo" |> should equal "cow says moo, de gozaru"
         cows "MOOooOO" |> should equal "cow says MOOooOO, de gozaru"
 
@@ -161,7 +160,7 @@ module ``08: Putting the Function into Functional Programming`` =
             fun t -> t-middle, t+middle
         // note the number of inputs provided below.  Do you see why I can do this?
         calculate 10 20 5 |> should equal (0, 10)
-        calculate 0 600 250 |> should equal (-50, 550)
+        calculate 0 600 250 |> should equal (-50,550)
 
     [<Test>]
     let ``22 Using a value defined in an inner scope`` () =
@@ -194,25 +193,25 @@ module ``08: Putting the Function into Functional Programming`` =
         let rec isValid dino =
             match dino with
             | [] -> "All valid."
-            | "Thesaurus"::_ -> "A thesaurus isn't a dinosaur!"
-            | _::rest -> isValid rest                   //transverse the next elements in the list
+            | "Thesaurus"::_ -> "A thesaurus isn't a dinosaur!"   //transverse the next elements in the list
+            | _::rest -> isValid rest 
         isValid ["Stegosaurus"; "Bambiraptor"] |> should equal "All valid."
-        isValid ["Triceratops"; "Thesaurus"; "Tyrannosaurus Rex"] |> should equal "A thesaurus isn't a dinosaur!"  //jumps out of the recursion
+        isValid ["Triceratops"; "Thesaurus"; "Tyrannosaurus Rex"] |> should equal "A thesaurus isn't a dinosaur!"
 
     [<Test>]
     let ``25 Nesting functions`` () =
-        let hailstone x =          // 5 
-            let triple x = x * 3   //output will be 15 which will be addOne input
+        let hailstone x =                   //5
+            let triple x = x * 3           // output will be 15 which will be addOne input 
             let addOne x = x + 1
-            addOne (triple x) // see AboutCombiningFunctions.fs to see a better way of doing this   takes in the value 5 
+            addOne (triple x) // see AboutCombiningFunctions.fs to see a better way of doing this
         hailstone 5 |> should equal 16
 
     [<Test>]
     let ``26 Functions have types`` () =
         let a x y = x + y
         let b a b c d e = sprintf "%d %f %s %c %b" a b c d e
-        a |> should be ofType<int-> int-> int>
-        b |> should be ofType<int->float -> string->char->bool->string>
+        a |> should be ofType<int->int-> int>
+        b |> should be ofType<int->float->string->char->bool->string>
         b 14 -8.7 |> should be ofType<string->char->bool->string>
 
 
@@ -236,9 +235,9 @@ module ``08: Putting the Function into Functional Programming`` =
             | false -> "Slink"
         let check x =
             x % 2 <> 0 && x % 3 <> 0 && x % 5 <> 0 && x % 7 <> 0 && x % 11 <> 0
-        myIf (fun x -> x%2 = 0) |> should equal "Slink"
+        myIf (fun x -> x%2 = 0) |> should equal  "Slink"
         myIf (fun x -> x<35) |> should equal "Pink"
-        myIf (fun x -> x+2 = 0) |> should equal "Slink"
+        myIf (fun x -> x+2 = 0) |> should equal  "Slink"
         myIf (fun x -> x+2 = 21 || x-2 = 21) |> should equal "Pink"
         myIf check |> should equal "Pink"
 
@@ -253,7 +252,7 @@ module ``08: Putting the Function into Functional Programming`` =
 
     [<Test>]
     let ``29 We can use a type annotation for a function's output`` () =
-        let k a b : float = a * b
+        let k a b :float= a * b
         k 5.0 3.0 |> should equal 15.0 
 
     (*

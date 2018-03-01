@@ -62,5 +62,5 @@ module ``24: About You`` =
     [<Test>]
     let ``Where to now?`` () =
         let resources = ["http://fsharpforfunandprofit.com"; "http://fssnip.net"; "http://stackoverflow.com"]
-        let visited = __ // <-- as you visit, add to a list here!
+        let visited = resources // <-- as you visit, add to a list here!
         visited |> should equal resources

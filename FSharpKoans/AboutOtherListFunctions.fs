@@ -20,7 +20,15 @@ module ``19: Other list functions`` =
     [<Test>]
     let ``01 exists: finding whether any matching item exists`` () =
         let exists (f : 'a -> bool) (xs : 'a list) : bool =
-            __ // Does this: https://msdn.microsoft.com/en-us/library/ee370309.aspx
+         let rec function_output xs =
+          match xs with 
+          |x::rest ->
+                    match f(x) with
+                    |true-> true
+                    |_ -> function_output rest
+          |_-> false
+         function_output xs
+          // Does this: https://msdn.microsoft.com/en-us/library/ee370309.aspx
         exists ((=) 4) [7;6;5;4;5] |> should equal true
         exists (fun x -> String.length x < 4) ["true"; "false"] |> should equal false
         exists (fun _ -> true) [] |> should equal false
@@ -29,7 +37,14 @@ module ``19: Other list functions`` =
     [<Test>]
     let ``02 partition: splitting a list based on a criterion`` () =
         let partition (f : 'a -> bool) (xs : 'a list) : ('a list) * ('a list) =
-            __ // Does this: https://msdn.microsoft.com/en-us/library/ee353782.aspx
+          let rec function_impact xs output output1 =
+           match xs with
+           |[]-> List.rev output, List.rev output1
+           |x::rest -> 
+                     match f(x) with
+                     |true-> function_impact rest (x:: output) output1 
+                     |_-> function_impact rest  output (x:: output1)
+          function_impact xs [] []// Does this: https://msdn.microsoft.com/en-us/library/ee353782.aspx
         let a, b = partition (fun x -> x%2=0) [1;2;3;4;5;6;7;8;9;10]
         a |> should equal [2;4;6;8;10]
         b |> should equal [1;3;5;7;9]
@@ -44,7 +59,11 @@ module ``19: Other list functions`` =
     [<Test>]
     let ``03 init: creating a list based on a size and a function`` () =
         let init (n : int) (f : int -> 'a) : 'a list =
-            __ // Does this: https://msdn.microsoft.com/en-us/library/ee370497.aspx
+         let rec doubling n output xs=    // write a function which adds 1 to each element
+           match xs=n with
+           |true-> List.rev output
+           |_ -> doubling n (f(xs)::output) (xs+1)  
+         doubling n [] 0  // Does this: https://msdn.microsoft.com/en-us/library/ee370497.aspx
         init 10 (fun x -> x*2) |> should equal [0;2;4;6;8;10;12;14;16;18]
         init 4 (sprintf "(%d)") |> should equal ["(0)";"(1)";"(2)";"(3)"]
 
@@ -52,7 +71,14 @@ module ``19: Other list functions`` =
     [<Test>]
     let ``04 tryFind: find the first matching element, if any`` () =
         let tryFind (p : 'a -> bool) (xs : 'a list) : 'a option =
-            __ // Does this: https://msdn.microsoft.com/en-us/library/ee353506.aspx
+         let rec function_impact xs  =
+           match xs with
+           |x::rest->
+                    match p(x) with 
+                    |true  -> (Some x)
+                    |_->function_impact rest
+           |[]-> None
+         function_impact xs                 //Does this: https:msdn.microsoft.com/en-us/library/ee353506.aspx
         tryFind (fun x -> x<=45) [100;85;25;55;6] |> should equal (Some 25)
         tryFind (fun x -> x>450) [100;85;25;55;6] |> should equal None
 

@@ -6,10 +6,19 @@ A filter only lets particular elements through.
 *)
 
 module ``16: Filtering a list`` =
+    open System.Dynamic
+
     [<Test>]
     let ``01 Fixed-function filtering, the hard way`` () =
         let filter (xs : int list) : int list =
-            __ // write a function to filter for odd elements only.
+         let rec odd xs output =     // write a function to filter for odd elements only.
+          match xs with 
+          |[] -> List.rev output
+          |x::rest ->
+                   match x%2=1 with
+                   |true-> odd rest (x:: output)
+                   |_-> odd rest output          
+         odd xs []
         filter [1; 2; 3; 4] |> should equal [1; 3]
         filter [10; 9; 8; 7] |> should equal [9; 7]
         filter [15; 2; 7] |> should equal [15; 7]
@@ -27,8 +36,16 @@ module ``16: Filtering a list`` =
     [<Test>]
     let ``02 Specified-function filtering, the hard way`` () =
         let filter (f : 'a -> bool) (xs : 'a list) : 'a list =
-            __ // write a function which filters based on the specified criteria
-        filter (fun x -> x > 19) [9; 5; 23; 66; 4] |> should equal [23; 66]
+          let rec function_impact xs output =
+           match xs with
+           |[]-> List.rev output
+           |x::rest -> 
+                     match f(x) with
+                     |true-> function_impact rest (x:: output)
+                     |_-> function_impact rest output
+          function_impact xs []   // write a function which filters based on the specified criteria
+
+        filter (fun x -> x>19) [9; 5; 23; 66; 4] |> should equal [23; 66]
         filter (fun x -> String.length x = 4) ["moo"; "woof"; "yip"; "nyan"; "meow"]
         |> should equal ["woof"; "nyan"; "meow"]
         filter (fun (a,b) -> a*b >= 14) [9,3; 4,2; 4,5] |> should equal [9,3; 4,5]
@@ -36,7 +53,7 @@ module ``16: Filtering a list`` =
     // Hint: https://msdn.microsoft.com/en-us/library/ee370294.aspx
     [<Test>]
     let ``03 Specified-function mapping, the easy way`` () =
-        __ (fun x -> x > 19) [9; 5; 23; 66; 4] |> should equal [23; 66]
-        __ (fun x -> String.length x = 4) ["moo"; "woof"; "yip"; "nyan"; "meow"]
+        List.filter (fun x -> x > 19) [9; 5; 23; 66; 4] |> should equal [23; 66]
+        List.filter (fun x -> String.length x = 4) ["moo"; "woof"; "yip"; "nyan"; "meow"]
         |> should equal ["woof"; "nyan"; "meow"]
-        __ (fun (a,b) -> a*b >= 14) [9,3; 4,2; 4,5] |> should equal [9,3; 4,5]
+        List.filter (fun (a,b) -> a*b >= 14) [9,3; 4,2; 4,5] |> should equal [9,3; 4,5]

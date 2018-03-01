@@ -33,19 +33,19 @@ module ``18: Combining functions`` =
     let ``01 |>, the 'pipe' operator`` () =
         let add5 a = a + 5
         let double a = a * 2
-        3 |> add5 |> double |> should equal __  // <-- start with three, add 5, then double. Readable, isn't it?
-        3 |> double |> add5 |> should equal __
-        6 |> add5 |> add5 |> should equal __
-        8 |> double |> double |> add5 |> should equal __
+        3 |> add5 |> double |> should equal 16  // <-- start with three, add 5, then double. Readable, isn't it?
+        3 |> double |> add5 |> should equal 11
+        6 |> add5 |> add5 |> should equal 16
+        8 |> double |> double |> add5 |> should equal 37
 
     [<Test>]
     let ``02 The output type of one pipe must be the input type to the next`` () =
         let toString (x : int) = string x
         let toInt (x : float) = int x
-        toInt |> should be ofType<FILL_ME_IN>
-        toString |> should be ofType<FILL_ME_IN>
-        3.14 |> __ |> __ |> should equal "3"
-
+        toInt |> should be ofType<float->int>
+        toString |> should be ofType<int->string>
+        3.14 |> toInt |> toString |> should equal "3"
+   
     (*
         The backwards-pipe operator takes:
         - a function 'a -> 'b
@@ -65,7 +65,7 @@ module ``18: Combining functions`` =
         let a x =
             x = 4
         not (a 4) |> should equal false
-        (__ __ a 4) |> should equal false // <-- put <| in one of the spaces to fill in
+        ( not <| a 4) |> should equal false // <-- put <| in one of the spaces to fill in
 
     (*
         The compose operator takes:
@@ -86,14 +86,14 @@ module ``18: Combining functions`` =
     let ``04 >>, the 'compose' operator`` () =
         let add5 a = a + 5
         let double a = a * 2
-        let i = add5 >> double
+        let i = add5 >> double   //let (>>)  add5 double=fun i-> double(add5 i)
         let j = double >> add5
         let k = double >> double >> double
         let l = j >> i
-        i 3 |> should equal __
-        j 3 |> should equal __
-        k 3 |> should equal __
-        l 3 |> should equal __
+        i 3 |> should equal 16   
+        j 3 |> should equal 11
+        k 3 |> should equal 24
+        l 3 |> should equal 32
 
     [<Test>]
     let ``05 >>, the compose operator, creates new functions by "joining" old ones`` () =
@@ -103,7 +103,7 @@ module ``18: Combining functions`` =
             | [] -> ["??"]
             | _ -> List.map string xs
         let appendEquals s = s + " = ??"
-        let f = __ // <-- This is a one-line answer which uses >>
+        let f = stringify>>joinTerms>>appendEquals // <-- This is a one-line answer which uses >>
         f [3;5;7;3] |> should equal "3 + 5 + 7 + 3 = ??"
         f [2;4;6] |> should equal "2 + 4 + 6 = ??"
         f [] |> should equal "?? = ??"
