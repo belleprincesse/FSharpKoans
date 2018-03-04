@@ -89,7 +89,19 @@ module ``21: Sequences and Arrays`` =
         // https://en.wikipedia.org/wiki/Collatz_conjecture#Statement_of_the_problem
         // ... when the sequence reaches 1, stop.
         let hailstone seed =
-            __
+           Seq.unfold (fun state ->
+                match state with
+                | 0 -> None
+                | 1 -> Some(state,state-1)
+                | _ ->
+                      match state%2=0 with
+                      | true->
+                           let result = state/2
+                           Some (state, result)
+                      |_ ->
+                          let result = (state*3)+1
+                          Some (state, result)
+            ) seed
         hailstone 6 |> Seq.toList |> should equal [6; 3; 10; 5; 16; 8; 4; 2; 1]
         hailstone 19 |> Seq.toList |> should equal [19; 58; 29; 88; 44; 22; 11; 34; 17; 52; 26; 13; 40; 20; 10; 5; 16; 8; 4; 2; 1]
         hailstone 1 |> Seq.toList |> should equal [1]
@@ -112,7 +124,15 @@ module ``21: Sequences and Arrays`` =
                     yield! hailstone result // I'm giving back values taken from a sequence here
             }
         let rec puffery x =
-            __ // you've seen the 'puffery' function in the previous test, yes?
+             seq {
+                yield x
+                match String.length x with
+                | 0 -> ()
+                | 1 -> ()
+                | _ ->
+                    let result = x.[..String.length x-2]    
+                    yield! puffery result 
+            } // you've seen the 'puffery' function in the previous test, yes?
             // Implement that here, using a sequence expression.
         puffery "Whizz!" |> Seq.toList |> should equal ["Whizz!"; "Whizz"; "Whiz"; "Whi"; "Wh"; "W"]
         puffery "ZchelnIk" |> Seq.toList |> should equal ["ZchelnIk"; "ZchelnI"; "Zcheln"; "Zchel"; "Zche"; "Zch"; "Zc"; "Z"]
@@ -121,7 +141,7 @@ module ``21: Sequences and Arrays`` =
     [<Test>]
     let ``05 Arrays are much like lists`` () =
         // Arrays use [| and |], and Lists use [ and ] .
-        let oneToFifteen = __ // <-- WITHOUT using Array.init
-        let a = Array.init 5 __
+        let oneToFifteen = [|for i in 0..14 -> i+1|] // <-- WITHOUT using Array.init
+        let a = Array.init 5 (fun adding -> adding+1)
         oneToFifteen |> should equal [|1;2;3;4;5;6;7;8;9;10;11;12;13;14;15|]
         a |> should equal [|1;2;3;4;5|]

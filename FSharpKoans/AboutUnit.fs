@@ -57,7 +57,7 @@ module ``20: Unit 00`` =
         scrollPositions |> should be ofType<(unit->string)list>
         getWorkAtPosition |> should be ofType<int->unit->string>
         getWorkAtPosition 3 |> should be ofType<(int->string)->(int->(unit->string)list)->string>
-        //(getWorkAtPosition 3) () |> should be ofType<unit>
+        //(getWorkAtPosition 3) () |> should be ofType<unit->string>
         //getWorkAtPosition 250 |> should be ofType<int->unit->string>
         //(getWorkAtPosition 250) () |> should be ofType<FILL_ME_IN>
         //(getWorkAtPosition 5) () |> should equal __
