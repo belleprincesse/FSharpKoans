@@ -17,7 +17,7 @@ module ``05: I Have Here In My Hand A List`` =
         let myList = "apple"::"grape"::"pear"::"biscuit"::[]          //add start of the list, so the first data is apple
         let myOtherList = "orange"::"lemon"::"princess"::["queen"]   // queen is already in the list, the first is orange then the last is queen
         let myNextList = "lily"::"sunflower"::"daisy"::["carrot"] // you may use [ and ] symbols on this line.
-        let myLastList = "naartjie"::"raisin"::"apple"::"grape"::"pear"::"biscuit"::[] // DO NOT use [ or ] symbols on this line!
+        let myLastList = "naartjie"::"raisin"::myList// DO NOT use [ or ] symbols on this line!
         myList |> should equal [ "apple"; "grape"; "pear"; "biscuit" ]
         myOtherList |> should equal [ "orange"; "lemon"; "princess"; "queen" ]
         myNextList |> should equal ["lily"; "sunflower"; "daisy"; "carrot"]
