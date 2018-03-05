@@ -56,12 +56,12 @@ module ``20: Unit 00`` =
         
         scrollPositions |> should be ofType<(unit->string)list>
         getWorkAtPosition |> should be ofType<int->unit->string>
-        getWorkAtPosition 3 |> should be ofType<(int->string)->(int->(unit->string)list)->string>
-        //(getWorkAtPosition 3) () |> should be ofType<unit->string>
-        //getWorkAtPosition 250 |> should be ofType<int->unit->string>
-        //(getWorkAtPosition 250) () |> should be ofType<FILL_ME_IN>
-        //(getWorkAtPosition 5) () |> should equal __
-        //(getWorkAtPosition -7) () |> should equal __
+        getWorkAtPosition 3 |> should be ofType<unit->string>
+        (getWorkAtPosition 3) () |> should be ofType<string>
+        getWorkAtPosition 250 |> should be ofType<unit->string>
+        (getWorkAtPosition 250) () |> should be ofType<string>
+        (getWorkAtPosition 5) () |> should equal "Load video"
+        (getWorkAtPosition -7) () |> should equal "Nothing to do"
 
     (*
         Sometimes we want to do something purely for a side-effect

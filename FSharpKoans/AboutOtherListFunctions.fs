@@ -16,6 +16,8 @@ no *semantic* difference between them.
 *)
 
 module ``19: Other list functions`` =
+    open System.Dynamic
+
     // List.exists
     [<Test>]
     let ``01 exists: finding whether any matching item exists`` () =
@@ -86,14 +88,15 @@ module ``19: Other list functions`` =
     [<Test>]
     let ``05 tryPick: find the first matching element, if any, and transform it`` () =
         let tryPick (p : 'a -> 'b option) (xs : 'a list) : 'b option =
-          __
-         (*let rec list_checker xs i =
-          match xs.[i].GetType |> should be ofType<string> with    // Does this: https://msdn.microsoft.com/en-us/library/ee353814.aspx
-          |true ->
-                g(xs.[i]) 
-          |_ -> 
-              g(xs.[i]) 
-         list_checker xs 0 *)
+          
+            let rec f xs = 
+                match xs with
+                | []-> option.None
+                | _::rest -> 
+                        match p (xs.Head) with 
+                        |None-> f rest 
+                        | _->p (xs.Head)  // Does this: https://msdn.microsoft.com/en-us/library/ee353814.aspx
+            f xs  
                 
         let f x =
             match x<=45 with
@@ -124,7 +127,16 @@ module ``19: Other list functions`` =
         // - why can't it take an 'a->'b, instead of an 'a->'b option ?
         // - why does it return a 'b list, and not a 'b list option ?
         let choose (p : 'a -> 'b option) (xs : 'a list) : 'b list =
-            __ // Does this: https://msdn.microsoft.com/en-us/library/ee353456.aspx
+           let rec f xs out=
+            match xs with
+            |[]->List.rev out 
+            |_::rest->
+                    match p(xs.Head) with
+                    |None-> f rest (out)
+                    |_-> f rest (((p (xs.Head)).Value)::out)
+           f xs []         
+                    
+                    // Does this: https://msdn.microsoft.com/en-us/library/ee353456.aspx
         let f x =
             match x<=45 with
             | true -> Some(x*2)
@@ -142,7 +154,11 @@ module ``19: Other list functions`` =
     [<Test>]
     let ``07 mapi: like map, but passes along an item index as well`` () =
         let mapi (f : int -> 'a -> 'b) (xs : 'a list) : 'b list =
-           __   // Does this: https://msdn.microsoft.com/en-us/library/ee353425.aspx
+           let rec p xs output y=
+            match xs with 
+            |[]-> List.rev output
+            |_::rest -> p rest ((f (y) (xs.Head))::output) (y+1)
+           p xs [] 0       // Does this: https://msdn.microsoft.com/en-us/library/ee353425.aspx
         mapi (fun i x -> -i, x+1) [9;8;7;6] |> should equal [0,10; -1,9; -2,8; -3,7]
         let hailstone i t =
             match i%2 with

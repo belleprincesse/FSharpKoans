@@ -63,7 +63,12 @@ module ``17: Welcome to the functional fold`` =
     [<Test>]
     let ``03 Folding, the hard way`` () =
         let fold (f : 'a -> 'b -> 'a) (initialState : 'a) (xs : 'b list) : 'a =
-          __  // write a function to do a fold.
+          let rec foldy xs start =
+           match xs with
+           |[]->start
+           |x::rest ->foldy rest (f(start) x) 
+          foldy xs initialState
+          // write a function to do a fold.
         fold (+) 0 [1;2;3;4] |> should equal 10
         fold (*) 2 [1;2;3;4] |> should equal 48
         fold (fun state item -> sprintf "%s %s" state item) "items:" ["dog"; "cat"; "bat"; "rat"]
