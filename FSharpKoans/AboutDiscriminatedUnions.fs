@@ -73,5 +73,21 @@ module ``10: The Good Kind of Discrimination`` =
             match x with
             | Empty -> 0
             | Node (_, a, b) -> 1 + max (depth a) (depth b)
-        let a = (*Node("1",Node("2",Node("3",Node("4",Empty,Empty),Node("2",Node("3",Node("4",Empty,Empty)*)__ // <-- you may want to spread this over multiple lines and/or let-bindings ...!
+        let a = 
+              Node("1",
+                    Node("2",
+                        Node("3",
+                            Node("4",Empty,Empty),
+                            Node("4",Empty,Empty)),
+                        Node("3",
+                            Node("4",Empty,Empty),
+                            Node("4",Empty,Empty))),
+                    Node("2",
+                        Node("3",
+                            Node("4",Empty,Empty),
+                            Node("4",Empty,Empty)),
+                        Node("3",
+                            Node("4",Empty,Empty),
+                            Node("4",Empty,Empty))))
+                   // <-- you may want to spread this over multiple lines and/or let-bindings ...!
         depth a |> should equal 4// a binary tree with 4 levels
